@@ -34,16 +34,16 @@
     font-family: 'Poppins', sans-serif;
     /* font-weight: 600; */
     color: white;
-    border: var(--background);
-    border-radius: 15px;
+    /* border: 1px solid var(--clickgreen); */
+    /* border-radius: 15px; */
 }
 
 #buttons-cluster button:hover {
     background: var(--hovergreen);
-    border: var(--hovergreen);
+    /* border: var(--hovergreen); */
 }
 
 #buttons-cluster button:active {
     background: var(--clickgreen);
-    border: var(--clickgreen);
+    /* border: var(--clickgreen); */
 }
