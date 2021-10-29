@@ -14,11 +14,11 @@
     margin: 0 auto;
     width: 500px;
     border-radius: 20px;
-    padding: 25px;
+    padding: 30px;
 }
 #display {
-    text-align: center;
-    padding: 30px 20px;
+    text-align: right;
+    padding: 20px 30px;
     color: white;
     background: var(--clickgreen);
     width: 90%;
