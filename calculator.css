@@ -5,6 +5,10 @@
     --clickgreen: #09342F;
     --background: #136F63;
 }
+
+body {
+    background: #fdfdff;
+}
 #calculator {
     display: flex;
     flex-direction: column;
@@ -25,6 +29,7 @@
     border-radius: 10px;
     font-size: 48px;
     font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
     
 }
 #buttons-cluster {
@@ -38,11 +43,7 @@
     border-radius: 20px;
 }
 
-#buttons-cluster, #buttons-cluster button {
-    
-}
-
-#buttons-cluster button {
+.operator, .number, #clear, #decimal, #equal {
     width: 100px;
     height: 100px;
     text-align: center;
@@ -64,4 +65,8 @@
 #buttons-cluster button:active {
     background: var(--clickgreen);
     /* border: var(--clickgreen); */
+}
+
+.operator-pressed {
+    background: #1A9C8A;
 }
