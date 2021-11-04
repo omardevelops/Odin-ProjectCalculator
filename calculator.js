@@ -54,7 +54,7 @@ const equal_button = button_container.querySelector('#equal');
 const display = document.querySelector('#display');
 
 let displayText = 0;
-let heldNumber, newNumber, operator;
+let heldNumber, newNumber = '', operator;
 let operatorFlag = false; // True means clicked on operator
 
 
@@ -67,10 +67,7 @@ Array.from(number_buttons).forEach(function (button) {
                 updateDisplay(display.textContent + button.textContent);
             }
         } else {
-            heldNumber = display.textContent
-            console.log(display.textContent);
-            display.textContent = '';
-            newNumber = display.textContent + button.textContent;
+            newNumber += button.textContent;
             updateDisplay(newNumber);
             // operate(operator, heldNumber, newNumber)
         }
@@ -90,11 +87,15 @@ Array.from(operator_buttons).forEach(function (button) {
             if (btn.id != button.id) btn.classList.remove('operator-pressed');
             console.log(btn);
         });
+
+        heldNumber = display.textContent; // save previous number
     })
 });
 
 equal_button.addEventListener('click', function () {
     calculateResult(operator, parseFloat(heldNumber), parseFloat(newNumber));
+    newNumber = '';
+    operatorFlag = false;
 })
 
 clear_button.addEventListener('click', function () {
