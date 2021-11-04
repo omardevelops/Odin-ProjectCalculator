@@ -71,7 +71,7 @@ Array.from(number_buttons).forEach(function (button) {
             updateDisplay(newNumber);
             // operate(operator, heldNumber, newNumber)
         }
-        
+
     });
 });
 
@@ -80,7 +80,7 @@ Array.from(operator_buttons).forEach(function (button) {
         console.log('hello');
         operatorFlag = true;
         operator = button.id;
-        
+
         button.classList.add('operator-pressed');
         console.log(button);
         Array.from(operator_buttons).forEach(function (btn) {
@@ -93,13 +93,17 @@ Array.from(operator_buttons).forEach(function (button) {
 });
 
 equal_button.addEventListener('click', function () {
-    calculateResult(operator, parseFloat(heldNumber), parseFloat(newNumber));
-    newNumber = '';
-    operatorFlag = false;
+    if (operatorFlag === true) {
+        calculateResult(operator, parseFloat(heldNumber), parseFloat(newNumber));
+        newNumber = '';
+        operatorFlag = false;
+    }
 })
 
 clear_button.addEventListener('click', function () {
     display.textContent = '0';
+    newNumber = '';
+    heldNumber = '';
     operatorFlag = false;
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
