@@ -1,3 +1,15 @@
+const button_container = document.querySelector('#buttons-cluster');
+const number_buttons = button_container.getElementsByClassName('number');
+const operator_buttons = button_container.getElementsByClassName('operator');
+const clear_button = button_container.querySelector('#clear');
+const decimal_button = button_container.querySelector('#decimal');
+const equal_button = button_container.querySelector('#equal');
+const display = document.querySelector('#display');
+
+let displayText = 0;
+let heldNumber, newNumber = '', operator;
+let operatorFlag = false; // True means clicked on operator
+
 function add(x, y) {
     return x + y;
 }
@@ -42,21 +54,7 @@ function calculateResult(operator, num1, num2) {
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
     });
-    // operatorFlag = false;
 }
-
-const button_container = document.querySelector('#buttons-cluster');
-const number_buttons = button_container.getElementsByClassName('number');
-const operator_buttons = button_container.getElementsByClassName('operator');
-const clear_button = button_container.querySelector('#clear');
-const decimal_button = button_container.querySelector('#decimal');
-const equal_button = button_container.querySelector('#equal');
-const display = document.querySelector('#display');
-
-let displayText = 0;
-let heldNumber, newNumber = '', operator;
-let operatorFlag = false; // True means clicked on operator
-
 
 Array.from(number_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
@@ -69,7 +67,6 @@ Array.from(number_buttons).forEach(function (button) {
         } else {
             newNumber += button.textContent;
             updateDisplay(newNumber);
-            // operate(operator, heldNumber, newNumber)
         }
 
     });
