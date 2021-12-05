@@ -1,3 +1,15 @@
+const button_container = document.querySelector('#buttons-cluster');
+const number_buttons = button_container.getElementsByClassName('number');
+const operator_buttons = button_container.getElementsByClassName('operator');
+const clear_button = button_container.querySelector('#clear');
+const decimal_button = button_container.querySelector('#decimal');
+const equal_button = button_container.querySelector('#equal');
+const display = document.querySelector('#display');
+
+let displayText = 0;
+let heldNumber, newNumber = '', operator;
+let operatorFlag = false; // True means clicked on operator
+
 function add(x, y) {
     return x + y;
 }
@@ -42,21 +54,7 @@ function calculateResult(operator, num1, num2) {
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
     });
-    // operatorFlag = false;
 }
-
-const button_container = document.querySelector('#buttons-cluster');
-const number_buttons = button_container.getElementsByClassName('number');
-const operator_buttons = button_container.getElementsByClassName('operator');
-const clear_button = button_container.querySelector('#clear');
-const decimal_button = button_container.querySelector('#decimal');
-const equal_button = button_container.querySelector('#equal');
-const display = document.querySelector('#display');
-
-let displayText = 0;
-let heldNumber, newNumber = '', operator;
-let operatorFlag = false; // True means clicked on operator
-
 
 Array.from(number_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
@@ -69,20 +67,26 @@ Array.from(number_buttons).forEach(function (button) {
         } else {
             newNumber += button.textContent;
             updateDisplay(newNumber);
-            // operate(operator, heldNumber, newNumber)
         }
 
     });
 });
 
+// Operator buttons event listeners
 Array.from(operator_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
-        console.log('hello');
         operatorFlag = true;
+        let previousOperator = operator;
         operator = button.id;
 
-        button.classList.add('operator-pressed');
-        console.log(button);
+        // Calculate new result if new number is set
+        if (newNumber !== '') {
+            calculateResult(previousOperator, parseFloat(heldNumber), parseFloat(newNumber));
+            newNumber = '';
+        }
+
+        button.classList.add('operator-pressed'); // Highlight this button by adding this class
+        // Remove highlight from other operators
         Array.from(operator_buttons).forEach(function (btn) {
             if (btn.id != button.id) btn.classList.remove('operator-pressed');
             console.log(btn);
@@ -92,6 +96,7 @@ Array.from(operator_buttons).forEach(function (button) {
     })
 });
 
+// Equal button event listener
 equal_button.addEventListener('click', function () {
     if (operatorFlag === true) {
         calculateResult(operator, parseFloat(heldNumber), parseFloat(newNumber));
