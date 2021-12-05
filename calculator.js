@@ -72,14 +72,21 @@ Array.from(number_buttons).forEach(function (button) {
     });
 });
 
+// Operator buttons event listeners
 Array.from(operator_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
-        console.log('hello');
         operatorFlag = true;
+        let previousOperator = operator;
         operator = button.id;
 
-        button.classList.add('operator-pressed');
-        console.log(button);
+        // Calculate new result if new number is set
+        if (newNumber !== '') {
+            calculateResult(previousOperator, parseFloat(heldNumber), parseFloat(newNumber));
+            newNumber = '';
+        }
+
+        button.classList.add('operator-pressed'); // Highlight this button by adding this class
+        // Remove highlight from other operators
         Array.from(operator_buttons).forEach(function (btn) {
             if (btn.id != button.id) btn.classList.remove('operator-pressed');
             console.log(btn);
@@ -89,6 +96,7 @@ Array.from(operator_buttons).forEach(function (button) {
     })
 });
 
+// Equal button event listener
 equal_button.addEventListener('click', function () {
     if (operatorFlag === true) {
         calculateResult(operator, parseFloat(heldNumber), parseFloat(newNumber));
