@@ -67,7 +67,12 @@ function calculateResult(operator, num1, num2) {
         setTimeout(() => {
             clearDisplay();
         }, 1000);
-    } else updateDisplay(result);
+    } else {
+        if (Number.isInteger(result) == false)
+        result = Math.round((result + Number.EPSILON) * 100000000000) / 100000000000; // Limit decimal places
+        updateDisplay(result);
+    }
+
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
     });
