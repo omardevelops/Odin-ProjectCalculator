@@ -62,10 +62,10 @@ function clearDisplay() {
 
 function displayError(error) {
     updateDisplay(error);
-    buttonFunctionality(true);
+    buttonFunctionality(false);
     setTimeout(() => {
         clearDisplay();
-        buttonFunctionality(false);
+        buttonFunctionality(true);
     }, 1000);
 }
 
@@ -91,8 +91,9 @@ function calculateResult(operator, num1, num2) {
 }
 
 function buttonFunctionality(enabled) {
-    const buttons = Array.from(button_container.querySelector('button'));
-    buttons.forEach(button => button.disabled = enabled);
+    const buttons = Array.from(button_container.querySelectorAll('button'));
+    console.log(buttons);
+    buttons.forEach(button => button.disabled = !enabled);
 }
 
 Array.from(number_buttons).forEach(function (button) {
