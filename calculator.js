@@ -7,6 +7,7 @@ const equal_button = button_container.querySelector('#equal');
 const display = document.querySelector('#display');
 
 let displayText = 0;
+let maxDigits = 14;
 let heldNumber, newNumber = '', operator;
 let operatorFlag = false; // True means clicked on operator
 
@@ -59,18 +60,29 @@ function clearDisplay() {
     });
 }
 
+function displayError(error) {
+    updateDisplay(error);
+    buttonFunctionality(true);
+    setTimeout(() => {
+        clearDisplay();
+        buttonFunctionality(false);
+    }, 1000);
+}
+
 function calculateResult(operator, num1, num2) {
     console.group([operator, num1, num2]);
     let result = operate(operator, num1, num2);
     if (result == 'ERROR') {
-        updateDisplay('MATH ERROR');
-        setTimeout(() => {
-            clearDisplay();
-        }, 1000);
+        displayError('MATH ERROR');
     } else {
         if (Number.isInteger(result) == false)
         result = Math.round((result + Number.EPSILON) * 100000000000) / 100000000000; // Limit decimal places
-        updateDisplay(result);
+
+        if ((result + "").length >= maxDigits) {
+            displayError('OVERFLOW ERROR');
+        } else {
+            updateDisplay(result);
+        }
     }
 
     Array.from(operator_buttons).forEach(function (button) {
@@ -78,19 +90,27 @@ function calculateResult(operator, num1, num2) {
     });
 }
 
+function buttonFunctionality(enabled) {
+    const buttons = Array.from(button_container.querySelector('button'));
+    buttons.forEach(button => button.disabled = enabled);
+}
+
 Array.from(number_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
-        if (operatorFlag === false) {
-            if (display.textContent === '0') {
-                updateDisplay(button.textContent);
-            } else {
-                updateDisplay(display.textContent + button.textContent);
-            }
+        if (display.textContent.length >= maxDigits) {
+            displayError('OVERFLOW ERROR');
         } else {
-            newNumber += button.textContent;
-            updateDisplay(newNumber);
+            if (operatorFlag === false) {
+                if (display.textContent === '0') {
+                    updateDisplay(button.textContent);
+                } else {
+                    updateDisplay(display.textContent + button.textContent);
+                }
+            } else {
+                newNumber += button.textContent;
+                updateDisplay(newNumber);
+            }
         }
-
     });
 });
 
