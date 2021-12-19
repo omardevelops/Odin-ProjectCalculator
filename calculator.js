@@ -7,7 +7,9 @@ const equal_button = button_container.querySelector('#equal');
 const display = document.querySelector('#display');
 
 let displayText = 0;
-let heldNumber, newNumber = '', operator;
+let maxDigits = 14;
+let heldNumber, newNumber = '',
+    operator;
 let operatorFlag = false; // True means clicked on operator
 
 function add(x, y) {
@@ -59,33 +61,59 @@ function clearDisplay() {
     });
 }
 
+function displayError(error) {
+    updateDisplay(error);
+    buttonFunctionality(false);
+    setTimeout(() => {
+        clearDisplay();
+        buttonFunctionality(true);
+    }, 1000);
+}
+
 function calculateResult(operator, num1, num2) {
     console.group([operator, num1, num2]);
     let result = operate(operator, num1, num2);
     if (result == 'ERROR') {
-        updateDisplay('MATH ERROR');
-        setTimeout(() => {
-            clearDisplay();
-        }, 1000);
-    } else updateDisplay(result);
+        displayError('MATH ERROR');
+    } else {
+        if (Number.isInteger(result) == false)
+            result = Math.round((result + Number.EPSILON) * 1000000000000) / 1000000000000; // Limit decimal places
+
+        if ((result + "").length >= maxDigits && Number.isInteger(result)) {
+            displayError('OVERFLOW ERROR');
+        } else {
+            updateDisplay(result);
+        }
+    }
+
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
     });
 }
 
+function buttonFunctionality(enabled) {
+    const buttons = Array.from(button_container.querySelectorAll('button'));
+    console.log(buttons);
+    buttons.forEach(button => button.disabled = !enabled);
+}
+
 Array.from(number_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
         if (operatorFlag === false) {
-            if (display.textContent === '0') {
-                updateDisplay(button.textContent);
+            if (display.textContent.length >= maxDigits) {
+                displayError('OVERFLOW ERROR');
             } else {
-                updateDisplay(display.textContent + button.textContent);
+                if (display.textContent === '0') {
+                    updateDisplay(button.textContent);
+                } else {
+                    updateDisplay(display.textContent + button.textContent);
+                }
             }
+            
         } else {
             newNumber += button.textContent;
             updateDisplay(newNumber);
         }
-
     });
 });
 
