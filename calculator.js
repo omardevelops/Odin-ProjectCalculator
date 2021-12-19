@@ -8,7 +8,8 @@ const display = document.querySelector('#display');
 
 let displayText = 0;
 let maxDigits = 14;
-let heldNumber, newNumber = '', operator;
+let heldNumber, newNumber = '',
+    operator;
 let operatorFlag = false; // True means clicked on operator
 
 function add(x, y) {
@@ -76,9 +77,9 @@ function calculateResult(operator, num1, num2) {
         displayError('MATH ERROR');
     } else {
         if (Number.isInteger(result) == false)
-        result = Math.round((result + Number.EPSILON) * 100000000000) / 100000000000; // Limit decimal places
+            result = Math.round((result + Number.EPSILON) * 1000000000000) / 1000000000000; // Limit decimal places
 
-        if ((result + "").length >= maxDigits) {
+        if ((result + "").length >= maxDigits && Number.isInteger(result)) {
             displayError('OVERFLOW ERROR');
         } else {
             updateDisplay(result);
@@ -98,19 +99,20 @@ function buttonFunctionality(enabled) {
 
 Array.from(number_buttons).forEach(function (button) {
     button.addEventListener('click', function () {
-        if (display.textContent.length >= maxDigits) {
-            displayError('OVERFLOW ERROR');
-        } else {
-            if (operatorFlag === false) {
+        if (operatorFlag === false) {
+            if (display.textContent.length >= maxDigits) {
+                displayError('OVERFLOW ERROR');
+            } else {
                 if (display.textContent === '0') {
                     updateDisplay(button.textContent);
                 } else {
                     updateDisplay(display.textContent + button.textContent);
                 }
-            } else {
-                newNumber += button.textContent;
-                updateDisplay(newNumber);
             }
+            
+        } else {
+            newNumber += button.textContent;
+            updateDisplay(newNumber);
         }
     });
 });
