@@ -23,6 +23,7 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
+    if (y == 0) return 'ERROR';
     return x / y;
 }
 
@@ -48,9 +49,25 @@ function updateDisplay(text) {
     display.textContent = text;
 }
 
+function clearDisplay() {
+    display.textContent = '0';
+    newNumber = '';
+    heldNumber = '';
+    operatorFlag = false;
+    Array.from(operator_buttons).forEach(function (button) {
+        button.classList.remove('operator-pressed');
+    });
+}
+
 function calculateResult(operator, num1, num2) {
     console.group([operator, num1, num2]);
-    updateDisplay(operate(operator, num1, num2));
+    let result = operate(operator, num1, num2);
+    if (result == 'ERROR') {
+        updateDisplay('MATH ERROR');
+        setTimeout(() => {
+            clearDisplay();
+        }, 1000);
+    } else updateDisplay(result);
     Array.from(operator_buttons).forEach(function (button) {
         button.classList.remove('operator-pressed');
     });
@@ -105,15 +122,7 @@ equal_button.addEventListener('click', function () {
     }
 })
 
-clear_button.addEventListener('click', function () {
-    display.textContent = '0';
-    newNumber = '';
-    heldNumber = '';
-    operatorFlag = false;
-    Array.from(operator_buttons).forEach(function (button) {
-        button.classList.remove('operator-pressed');
-    });
-});
+clear_button.addEventListener('click', clearDisplay);
 
 // decimal_button.addEventListener('click', function () {
 //     console.log(decimal_button.textContent);
